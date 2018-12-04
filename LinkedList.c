@@ -290,8 +290,6 @@ void swapNodesForValue(Node **headref, int x, int y)
 
 void swapNodes(Node **firstref, Node **secondref)
 {
-    printf("%d, %d\n", (*firstref)->data, (*secondref)->data);
-    printf("%d, %d\n", (*firstref)->next->data, (*secondref)->next->data);
     if((*firstref) == null || (*secondref) == null)
         return;
     if((*firstref)->next == (*secondref))
@@ -309,7 +307,6 @@ void swapNodes(Node **firstref, Node **secondref)
     temp = (*firstref);
     (*firstref) = (*secondref);
     (*secondref) = temp;
-    printf("%d, %d\n", (*firstref)->data, (*secondref)->data);
 }
 
 void swapNodesPairwise(Node **headref)
@@ -327,6 +324,51 @@ void swapNodesPairwise(Node **headref)
     }
 }
 
+void movelastToFront(Node **headref)
+{
+    Node *current = (*headref);
+    if(current== null || current->next == null)
+    {
+        return;
+    }
+    while(current->next->next != null)
+        current = current->next;
+    swapNodes(headref, &current->next);
+}
+
+int findIntersectionPoint(Node *head1, Node *head2)
+{
+    int c1 = GetTotalNodes(head1);
+    int c2 = GetTotalNodes(head2);
+    if(c2>c1)
+    {
+       int c = (c2-c1);
+       while(c--)
+            head2=head2->next;
+       while(head1!=null && head2!=null)
+       {
+           if(head1 == head2)
+            return head1->data;
+           head1=head1->next;
+           head2=head2->next;
+       }
+    }
+    else
+    {
+        int c = (c1-c2);
+       while(c--)
+            head1=head1->next;
+       while(head1!=null && head2!=null)
+       {
+           if(head1 == head2)
+            return head1->data;
+           head1=head1->next;
+           head2=head2->next;
+       }
+    }
+    return -1;
+}
+
 int main()
 {
     Node *head = NULL;
@@ -337,14 +379,26 @@ int main()
     InsertAtLast(&head, 3);
     InsertAtLast(&head, 4);
     InsertAtLast(&head, 5);
-    InsertAtLast(&head, 6);
+    /*Node *head2 = NULL;
+    InsertAtLast(&head2, -1);
+    InsertAtLast(&head2, -2);*/
+
+    //head2->next->next = head->next->next->next;
+    //InsertAtLast(&head, 6);
     //head->next->next->next->next->next->next = head->next->next;
     //int x, y;
     //printf("Enter x and y: ");
     //scanf("%d %d", &x, &y);
     PrintList(head);
-    swapNodesPairwise(&(head));
-    printf("\n");
-    printInfiniteList(head, 20);
+    /*swapNodesPairwise(&(head));
+    swapNodesForValue(&head, 1, 3);
+    detectAndRemoveLoop(head);
+    isListPalindrome(head);
+    reverseList(&head);
+    movelastToFront(&head);
+    movelastToFront(&head);*/
+
+    printf("\n%d\n", findIntersectionPoint(head, head2));
+    printInfiniteList(head2, 20);
     return 0;
 }
