@@ -369,11 +369,101 @@ int findIntersectionPoint(Node *head1, Node *head2)
     return -1;
 }
 
+void segregateEvenOdd(Node **headref)
+{
+    Node *evenStart=NULL, *evenEnd=NULL, *oddStart=NULL, *oddEnd=NULL;
+    Node *current = (*headref);
+    while(current!=null)
+    {
+        int val = current->data;
+        if(val%2 == 0)
+        {
+            if(evenStart == null)
+            {
+                evenStart = current;
+                evenEnd = current;
+            }
+            else
+            {
+                evenEnd->next = current;
+                evenEnd = evenEnd->next;
+            }
+        }
+        else
+        {
+            if(oddStart == null)
+            {
+                oddStart = current;
+                oddEnd = current;
+            }
+            else
+            {
+                oddEnd->next = current;
+                oddEnd = oddEnd->next;
+            }
+        }
+        current = current->next;
+    }
+    if(evenStart == null || oddStart == null)
+    {
+        return;
+    }
+    evenEnd->next = oddStart;
+    oddEnd->next = NULL;
+    (*headref) = evenStart;
+}
+
+void recursiveReverse(Node **headref)
+{
+    if((*headref) == null)
+        return;
+    Node *first = (*headref);
+    Node *rest = first->next;
+    if(rest == null)
+        return;
+    recursiveReverse(&rest);
+    first->next->next = first;
+    first->next = NULL;
+    (*headref) = rest;
+}
+
+void printListReverse(Node *head, Node *current)
+{
+    if(current == null)
+        return;
+    printListReverse(head, current->next);
+    printf("%d", current->data);
+    if(current!=head)
+        printf("->");
+    else
+        printf("\n");
+
+}
+
+Node* reverseInGroups(Node *head, int k)
+{
+    Node *prev = NULL;
+    Node *next = NULL;
+    Node *current = head;
+    int count = 0;
+    while(current!=null && count < k)
+    {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+        count++;
+    }
+    if(next != null)
+    {
+        head->next = reverseInGroups(next, k);
+    }
+    return prev;
+}
+
 int main()
 {
     Node *head = NULL;
-    char ch='Y';
-    int data;
     InsertAtLast(&head, 1);
     InsertAtLast(&head, 2);
     InsertAtLast(&head, 3);
@@ -390,6 +480,7 @@ int main()
     //printf("Enter x and y: ");
     //scanf("%d %d", &x, &y);
     PrintList(head);
+    printListReverse(head, head);
     /*swapNodesPairwise(&(head));
     swapNodesForValue(&head, 1, 3);
     detectAndRemoveLoop(head);
@@ -397,8 +488,7 @@ int main()
     reverseList(&head);
     movelastToFront(&head);
     movelastToFront(&head);*/
-
-    printf("\n%d\n", findIntersectionPoint(head, head2));
-    printInfiniteList(head2, 20);
+    segregateEvenOdd(&head);
+    printListReverse(head, head);
     return 0;
 }
