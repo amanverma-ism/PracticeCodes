@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include "Stack.c"
+#include "stackRes.c"
 
 int key[10];
 int right[10];
