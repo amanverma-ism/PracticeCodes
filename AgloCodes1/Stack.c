@@ -21,6 +21,14 @@ bool stack_empty(Stack *stack)
         return false;
 }
 
+int top(Stack* stack)
+{
+    if(stack_empty(stack))
+        return -1;
+    else
+        return stack->data[stack->top];
+}
+
 void push(Stack *stack, int x)
 {
     stack->top++;
